@@ -68,31 +68,63 @@ $(function() {
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
           */
-        it('icon clicked once should be visible', function(){
+        it('should toggle visibility with each menu-icon click', function(){
             $(".menu-icon-link").click();
             expect( $("body").hasClass("menu-hidden") ).toEqual(false);
 
             $(".menu-icon-link").click();
             expect( $("body").hasClass("menu-hidden") ).toEqual(true);
         });
+    });
 
     /* TODO: Write a new test suite named "Initial Entries" */
+    describe('Initial entries', function(){
 
+        beforeAll(function(done){
+            loadFeed(0, done);
+        });
         /* TODO: Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+         it('calls loadFeed and has at least 1 .entry in the .feed container', function(done){
+            expect( $( ".feed:has(.entry)").length ).toBeGreaterThan(-1);
+            expect( $( ".feed .entry h2" )[0].innerHTML ).toEqual( jasmine.any(String) );
+            done();
+         });
+    });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
+    describe('New Feed Selection', function(){
+        var entry0, entry1;
+
+        beforeAll(function(done){
+            // use 'window' as the object since 'loadFeed' method is global.
+            spyOn(window, 'loadFeed').and.callThrough();
+
+            // load feed to get entry0
+            loadFeed(0, function(){
+                entry0 = $(".entry h2").first()[0].innerHTML[0];
+
+                // then load another feed to get entry1
+                loadFeed(1, function(){
+                    entry1 = $(".entry h2").first()[0].innerHTML[0];
+                    done();
+                });
+            });
+        });
 
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
-
-
+        it("loadFeed calls with different args should load different strings", function(){
+            expect( entry0 ).toEqual( jasmine.any(String) );
+            expect( entry1 ).toEqual( jasmine.any(String) );
+            expect( entry0 == entry1 ).toEqual(false);
+        });
 
     });
 }());

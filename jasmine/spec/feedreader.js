@@ -74,6 +74,7 @@ $(function() {
 
     describe('Initial entries', function(){
 
+        // read a lot of the forum for this, ending with https://discussions.udacity.com/t/step-13-help-initial-entries/14839/3
         beforeAll(function(done){
             loadFeed(0, done);
         });
@@ -81,10 +82,9 @@ $(function() {
         /* Ensures when the loadFeed function is called and completes its work,
          * there is at least a single .entry element within the .feed container.
          */
-         it('calls loadFeed and has at least 1 .entry in the .feed container', function(done){
+         it('calls loadFeed and has at least 1 .entry in the .feed container', function(){
             expect( $( ".feed:has(.entry)").length ).toBeGreaterThan(-1);
             expect( $( ".feed .entry h2" )[0].innerHTML ).toEqual( jasmine.any(String) );
-            done();
          });
     });
 
@@ -92,7 +92,8 @@ $(function() {
         var entry0, entry1;
 
         beforeAll(function(done){
-            // use 'window' as the object since 'loadFeed' method is global.
+            // Use 'window' as the object since 'loadFeed' method is global.
+            // From https://stackoverflow.com/questions/9510148/using-jasmine-to-spy-on-a-function-without-an-object
             spyOn(window, 'loadFeed').and.callThrough();
 
             // load feed to get entry0

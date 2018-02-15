@@ -48,7 +48,7 @@ $(function() {
                 expect(feed.name).not.toBe("");
                 expect(feed.name).toEqual(jasmine.any(String));
             });
-         })
+         });
     });
 
 
